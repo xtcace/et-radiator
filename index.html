@@ -3,138 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Login — E.T. Radiator</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>QuoteMate – Quote Calculator for Tradies</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#050812;--s1:#0D1225;--s2:#131830;--s3:#1A213C;
-  --blue:#4A8CFF;--blue-dim:#2E6CD6;
-  --muted:#3E4D6E;--dim:#6478A0;--soft:#8D9FBE;--light:#C8D4ED;--white:#E8EEFA;
-  --line:rgba(255,255,255,0.05);--line2:rgba(255,255,255,0.09);
-}
-body{background:var(--bg);color:var(--light);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
-body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px;background-repeat:repeat}
-
-.bg-glow{position:fixed;top:20%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(74,140,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
-
-.page{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;position:relative;z-index:1}
-
-.login-wrap{width:100%;max-width:420px}
-
-.login-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:44px;text-decoration:none}
-.logo-mark{width:44px;height:44px}
-.logo-name{text-align:left}
-.logo-top{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--white)}
-.logo-top b{color:var(--blue)}
-.logo-bot{font-size:9px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--muted);display:block}
-
-.card{background:var(--s1);border:1px solid var(--line2);padding:40px}
-
-.card-top{margin-bottom:32px}
-.card-top h1{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--white);margin-bottom:6px}
-.card-top p{font-size:14px;color:var(--dim);font-weight:300}
-
-.ff{margin-bottom:18px}
-.ff label{display:block;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
-.ff input{
-  width:100%;padding:13px 16px;
-  background:var(--s2);border:1px solid var(--line2);
-  color:var(--light);font-family:'DM Sans',sans-serif;font-size:14px;
-  outline:none;transition:border-color .2s,background .2s;
-}
-.ff input:focus{border-color:var(--blue);background:var(--s3)}
-
-.btn{
-  width:100%;background:var(--blue);color:#fff;border:none;
-  padding:14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
-  letter-spacing:2px;text-transform:uppercase;cursor:pointer;
-  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
-  transition:background .2s;display:flex;align-items:center;justify-content:center;gap:10px;
-}
-.btn:hover{background:var(--blue-dim)}
-.btn:disabled{background:var(--muted);cursor:not-allowed}
-.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
-@keyframes spin{to{transform:rotate(360deg)}}
-.err{font-size:12px;color:#F0706A;margin-top:12px;display:none;text-align:center}
-
-.footer-note{text-align:center;margin-top:24px;font-size:12px;color:var(--muted)}
-.footer-note a{color:var(--blue);text-decoration:none}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a1a;min-height:100vh}
+  .topbar{background:#1a56a0;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+  .topbar-logo{font-size:18px;font-weight:700;color:#fff}
+  .topbar-sub{font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px}
+  .plan-badge{font-size:11px;background:rgba(255,255,255,0.2);color:#fff;padding:4px 10px;border-radius:20px;cursor:pointer}
+  .body{padding:14px;max-width:600px;margin:0 auto}
+  .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:12px}
+  .card-title{font-size:12px;font-weight:700;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;text-transform:uppercase;letter-spacing:0.05em}
+  .trade-tabs{display:flex;gap:6px;flex-wrap:wrap}
+  .trade-tab{font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid #d1d5db;background:transparent;color:#6b7280;cursor:pointer;transition:all 0.15s;margin-bottom:4px}
+  .trade-tab:hover{border-color:#93c5fd;color:#1d4ed8}
+  .trade-tab.active{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd;font-weight:600}
+  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .field-grid.single{grid-template-columns:1fr}
+  .field-label{font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:600}
+  .input-wrap{position:relative}
+  .input-prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#9ca3af;pointer-events:none}
+  .input-suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#9ca3af;pointer-events:none}
+  input[type=text],input[type=number],input[type=email],input[type=tel],textarea{width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;color:#111827;background:#f9fafb;outline:none;transition:border-color 0.15s;font-family:inherit}
+  input:focus,textarea:focus{border-color:#3b82f6;background:#fff}
+  .has-prefix input{padding-left:22px}
+  .has-suffix input{padding-right:26px}
+  textarea{resize:none;line-height:1.5}
+  .mat-header{display:grid;grid-template-columns:1fr 52px 76px 30px;gap:6px;margin-bottom:4px}
+  .mat-header span{font-size:11px;color:#9ca3af;font-weight:600}
+  .mat-row{display:grid;grid-template-columns:1fr 52px 76px 30px;gap:6px;margin-bottom:6px;align-items:center}
+  .rm-btn{width:28px;height:28px;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#9ca3af;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+  .rm-btn:hover{background:#fef2f2;color:#ef4444;border-color:#fca5a5}
+  .add-mat-btn{font-size:12px;color:#2563eb;background:none;border:none;cursor:pointer;padding:4px 0;margin-top:2px;font-weight:600}
+  .summary-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:5px 0;color:#6b7280}
+  .summary-row .val{font-weight:600;color:#374151}
+  .summary-divider{height:1px;background:#f3f4f6;margin:6px 0}
+  .summary-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 4px;border-top:2px solid #e5e7eb;margin-top:4px}
+  .summary-total .label{font-size:15px;font-weight:700;color:#111827}
+  .summary-total .amount{font-size:28px;font-weight:800;color:#111827}
+  .toast{background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 14px;font-size:13px;color:#065f46;margin-bottom:10px;display:none}
+  .toast.error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
+  .btn-copy{width:100%;padding:11px;background:transparent;color:#374151;border:1px solid #d1d5db;border-radius:8px;font-size:14px;cursor:pointer;margin-bottom:8px;font-weight:600}
+  .btn-copy:hover{background:#f9fafb}
+  .btn-send{width:100%;padding:13px;background:#059669;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn-send:hover{background:#047857}
+  .paywall-card{background:#fff;border:2px solid #2563eb;border-radius:12px;padding:16px;margin-top:12px;text-align:center;display:none}
+  .paywall-title{font-size:17px;font-weight:800;color:#111827;margin-bottom:4px}
+  .paywall-sub{font-size:13px;color:#6b7280;margin-bottom:14px;line-height:1.5}
+  .feat-list{text-align:left;margin-bottom:14px}
+  .feat-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;padding:4px 0}
+  .feat-tick{width:18px;height:18px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:11px;font-weight:700}
+  .btn-upgrade{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn-upgrade:hover{background:#1d4ed8}
+  .price-note{font-size:11px;color:#9ca3af;margin-top:6px}
+  .quote-counter{background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:8px 12px;font-size:12px;color:#92400e;margin-bottom:10px;text-align:center;font-weight:600;display:none}
+  .preview-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:16px}
+  .preview-overlay.show{display:flex}
+  .preview-modal{background:#fff;border-radius:12px;padding:20px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
+  .preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+  .preview-title{font-size:16px;font-weight:700;color:#111827}
+  .close-btn{background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280}
+  .preview-biz{font-size:15px;font-weight:700;color:#1a56a0;margin-bottom:2px}
+  .preview-contact{font-size:12px;color:#6b7280;margin-bottom:14px}
+  .preview-divider{height:1px;background:#e5e7eb;margin:10px 0}
+  .preview-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0}
+  .preview-row .preview-label{color:#6b7280}
+  .preview-row .preview-val{font-weight:600;color:#111827}
+  .preview-total-row{display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid #111827;margin-top:6px}
+  .preview-total-row .preview-label{font-size:15px;font-weight:700;color:#111827}
+  .preview-total-row .preview-val{font-size:20px;font-weight:800;color:#111827}
+  .preview-meta{font-size:11px;color:#9ca3af;margin-top:10px;text-align:center}
+  .btn-preview-copy{width:100%;padding:11px;background:#1a56a0;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px}
+  .quote-num-badge{display:inline-block;font-size:11px;background:#dbeafe;color:#1d4ed8;padding:3px 8px;border-radius:6px;font-weight:700;margin-bottom:8px}
+  @media(max-width:480px){.field-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="bg-glow"></div>
-<div class="page">
-  <div class="login-wrap">
-    <a href="../index.html" class="login-logo">
-      <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19 1L35.5 10V28L19 37L2.5 28V10L19 1Z" fill="#4A8CFF"/>
-        <rect x="9.5" y="13" width="19" height="12" rx=".8" fill="none" stroke="#fff" stroke-width="1.1"/>
-        <line x1="13.5" y1="13" x2="13.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".55"/>
-        <line x1="17.5" y1="13" x2="17.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".55"/>
-        <line x1="21.5" y1="13" x2="21.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".55"/>
-        <line x1="25.5" y1="13" x2="25.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".55"/>
-        <line x1="9.5" y1="16.5" x2="6.5" y2="16.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="9.5" y1="21.5" x2="6.5" y2="21.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="28.5" y1="16.5" x2="31.5" y2="16.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
-        <line x1="28.5" y1="21.5" x2="31.5" y2="21.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
-      </svg>
-      <div class="logo-name">
-        <span class="logo-top">E.T. <b>Radiator</b></span>
-        <span class="logo-bot">Admin Portal</span>
-      </div>
-    </a>
-
-    <div class="card">
-      <div class="card-top">
-        <h1>Sign In</h1>
-        <p>Admin access only — for workshop staff</p>
-      </div>
-      <div class="ff"><label>Email</label><input type="email" id="email" placeholder="admin@etradiator.com.au" autocomplete="username"></div>
-      <div class="ff"><label>Password</label><input type="password" id="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()"></div>
-      <button class="btn" id="login-btn" onclick="login()">
-        <span>Sign In</span>
-        <div class="spinner" id="spin"></div>
-      </button>
-      <p class="err" id="err"></p>
+<div class="topbar">
+  <div>
+    <div class="topbar-logo">QuoteMate</div>
+    <div class="topbar-sub">Professional quote calculator for tradies</div>
+  </div>
+  <span class="plan-badge" onclick="togglePaywall()">Free plan</span>
+</div>
+<div class="body">
+  <div class="toast" id="toast"></div>
+  <div class="quote-counter" id="quote-counter"></div>
+  <div class="card">
+    <div class="card-title">Your business details</div>
+    <div class="field-grid">
+      <div><div class="field-label">Business name</div><input type="text" id="biz-name" placeholder="e.g. Dave's Plumbing Co."></div>
+      <div><div class="field-label">Your name</div><input type="text" id="biz-contact" placeholder="e.g. Dave Smith"></div>
     </div>
-
-    <div class="footer-note"><a href="../index.html">← Back to website</a></div>
+    <div class="field-grid">
+      <div><div class="field-label">Phone</div><input type="tel" id="biz-phone" placeholder="e.g. 0412 345 678"></div>
+      <div><div class="field-label">Email</div><input type="email" id="biz-email" placeholder="e.g. dave@gmail.com"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Trade type</div>
+    <div class="trade-tabs">
+      <button class="trade-tab active" onclick="setTrade('plumber',this)">Plumber</button>
+      <button class="trade-tab" onclick="setTrade('electrician',this)">Electrician</button>
+      <button class="trade-tab" onclick="setTrade('cleaner',this)">Cleaner</button>
+      <button class="trade-tab" onclick="setTrade('painter',this)">Painter</button>
+      <button class="trade-tab" onclick="setTrade('builder',this)">Builder</button>
+      <button class="trade-tab" onclick="setTrade('carpenter',this)">Carpenter</button>
+      <button class="trade-tab" onclick="setTrade('landscaper',this)">Landscaper</button>
+      <button class="trade-tab" onclick="setTrade('tiler',this)">Tiler</button>
+      <button class="trade-tab" onclick="setTrade('concreter',this)">Concreter</button>
+      <button class="trade-tab" onclick="setTrade('plasterer',this)">Plasterer</button>
+      <button class="trade-tab" onclick="setTrade('roofer',this)">Roofer</button>
+      <button class="trade-tab" onclick="setTrade('hvac',this)">Air Con / HVAC</button>
+      <button class="trade-tab" onclick="setTrade('handyman',this)">Handyman</button>
+      <button class="trade-tab" onclick="setTrade('pest',this)">Pest Control</button>
+      <button class="trade-tab" onclick="setTrade('locksmith',this)">Locksmith</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Your rates</div>
+    <div class="field-grid">
+      <div><div class="field-label">Hourly rate</div><div class="input-wrap has-prefix"><span class="input-prefix">$</span><input type="number" id="rate" value="95" min="0" step="1" oninput="calc()"></div></div>
+      <div><div class="field-label">Call-out fee</div><div class="input-wrap has-prefix"><span class="input-prefix">$</span><input type="number" id="callout" value="80" min="0" step="1" oninput="calc()"></div></div>
+      <div><div class="field-label">Your margin</div><div class="input-wrap has-suffix"><input type="number" id="margin" value="20" min="0" max="100" step="1" oninput="calc()"><span class="input-suffix">%</span></div></div>
+      <div><div class="field-label">GST</div><div class="input-wrap has-suffix"><input type="number" id="gst" value="10" min="0" max="30" step="1" oninput="calc()"><span class="input-suffix">%</span></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Job details</div>
+    <div class="field-grid">
+      <div><div class="field-label">Client name</div><input type="text" id="client" placeholder="e.g. Sarah Johnson" oninput="calc()"></div>
+      <div><div class="field-label">Client phone</div><input type="tel" id="client-phone" placeholder="e.g. 0423 456 789"></div>
+    </div>
+    <div class="field-grid single" style="margin-bottom:10px"><div><div class="field-label">Job description</div><input type="text" id="jobdesc" placeholder="e.g. Replace hot water system" oninput="calc()"></div></div>
+    <div class="field-grid single" style="margin-bottom:10px"><div><div class="field-label">Job address</div><input type="text" id="job-address" placeholder="e.g. 12 Smith St, Parramatta NSW"></div></div>
+    <div class="field-grid">
+      <div><div class="field-label">Labour hours</div><input type="number" id="hours" value="3" min="0" step="0.5" oninput="calc()"></div>
+      <div><div class="field-label">Travel time (hrs)</div><input type="number" id="travel" value="0.5" min="0" step="0.5" oninput="calc()"></div>
+    </div>
+    <div style="margin-top:10px"><div class="field-label">Job notes</div><textarea id="notes" rows="2" placeholder="e.g. Access via side gate. Client needs job done before Friday."></textarea></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Materials & extras</div>
+    <div class="mat-header"><span>Item</span><span style="text-align:center">Qty</span><span style="text-align:right">Unit cost</span><span></span></div>
+    <div id="materials"></div>
+    <button class="add-mat-btn" onclick="addMaterial()">+ Add item</button>
+  </div>
+  <div class="card">
+    <div class="card-title">Quote summary</div>
+    <div class="quote-num-badge" id="quote-num-badge">QU-0001</div>
+    <div class="summary-row"><span>Call-out fee</span><span class="val" id="s-callout">$0.00</span></div>
+    <div class="summary-row"><span>Labour</span><span class="val" id="s-labour">$0.00</span></div>
+    <div class="summary-row"><span>Travel</span><span class="val" id="s-travel">$0.00</span></div>
+    <div class="summary-row"><span>Materials</span><span class="val" id="s-mats">$0.00</span></div>
+    <div class="summary-divider"></div>
+    <div class="summary-row"><span>Subtotal</span><span class="val" id="s-sub">$0.00</span></div>
+    <div class="summary-row"><span id="s-margin-lbl">Margin (20%)</span><span class="val" id="s-margin">$0.00</span></div>
+    <div class="summary-row"><span id="s-gst-lbl">GST (10%)</span><span class="val" id="s-gst">$0.00</span></div>
+    <div class="summary-total"><span class="label">Total</span><span class="amount" id="s-total">$0.00</span></div>
+    <div style="font-size:11px;color:#9ca3af;margin-top:6px" id="validity-date"></div>
+  </div>
+  <button class="btn-copy" onclick="previewQuote()">Preview & copy quote</button>
+  <button class="btn-send" onclick="window.open('https://buy.stripe.com/5kQ7sDbuEasOda14Fe0oM00','_blank')">Send quote as link — upgrade to Pro</button>
+  <div class="paywall-card" id="paywall">
+    <div class="paywall-title">Unlock QuoteMate Pro</div>
+    <div class="paywall-sub">Send professional quote links your clients can approve on their phone with one tap.</div>
+    <div class="feat-list">
+      <div class="feat-item"><div class="feat-tick">✓</div>Shareable quote link — client approves with one tap</div>
+      <div class="feat-item"><div class="feat-tick">✓</div>Unlimited quotes per day</div>
+      <div class="feat-item"><div class="feat-tick">✓</div>Save your quote history</div>
+      <div class="feat-item"><div class="feat-tick">✓</div>Add your business logo</div>
+      <div class="feat-item"><div class="feat-tick">✓</div>Auto-convert to invoice on approval</div>
+      <div class="feat-item"><div class="feat-tick">✓</div>Client e-signature</div>
+      <div class="feat-item"><div class="feat-tick">✓</div>Remove QuoteMate branding</div>
+    </div>
+    <button class="btn-upgrade" onclick="window.open('https://buy.stripe.com/5kQ7sDbuEasOda14Fe0oM00','_blank')">Start 14-day free trial</button>
+    <div class="price-note">$9/mo after trial · Cancel any time</div>
   </div>
 </div>
-
+<div class="preview-overlay" id="preview-overlay" onclick="closePreview(event)">
+  <div class="preview-modal">
+    <div class="preview-header">
+      <div class="preview-title">Quote preview</div>
+      <button class="close-btn" onclick="document.getElementById('preview-overlay').classList.remove('show')">✕</button>
+    </div>
+    <div id="preview-content"></div>
+    <button class="btn-preview-copy" onclick="copyFromPreview()">Copy quote as text</button>
+  </div>
+</div>
 <script>
-const SUPABASE_URL  = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON = 'YOUR_SUPABASE_ANON_KEY';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-
-// Redirect if already logged in
-sb.auth.getSession().then(({ data }) => {
-  if (data.session) window.location.href = 'dashboard.html';
-});
-
-async function login() {
-  const email    = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const btn  = document.getElementById('login-btn');
-  const spin = document.getElementById('spin');
-  const err  = document.getElementById('err');
-
-  err.style.display = 'none';
-  if (!email || !password) { err.textContent = 'Please enter your email and password.'; err.style.display = 'block'; return; }
-
-  btn.disabled = true; spin.style.display = 'block';
-
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) {
-    err.textContent = 'Incorrect email or password.';
-    err.style.display = 'block';
-    btn.disabled = false; spin.style.display = 'none';
-  } else {
-    window.location.href = 'dashboard.html';
-  }
-}
+var matCount=0,quoteCount=0;
+var tradeDefaults={
+  plumber:{rate:95,callout:80,margin:20,hours:3,travel:0.5,mats:[{n:'Copper fittings',q:1,c:45},{n:'Pipe (per metre)',q:3,c:12}]},
+  electrician:{rate:110,callout:90,margin:20,hours:2.5,travel:0.5,mats:[{n:'Cable (per metre)',q:5,c:8},{n:'GPO outlet',q:2,c:18}]},
+  cleaner:{rate:45,callout:0,margin:15,hours:4,travel:0.5,mats:[{n:'Cleaning supplies',q:1,c:25}]},
+  painter:{rate:65,callout:50,margin:25,hours:6,travel:1,mats:[{n:'Paint (10L)',q:2,c:85},{n:'Primer',q:1,c:40},{n:'Brushes & rollers',q:1,c:30}]},
+  builder:{rate:90,callout:100,margin:30,hours:8,travel:1,mats:[{n:'Timber (per sheet)',q:4,c:55},{n:'Screws & fixings',q:1,c:22}]},
+  carpenter:{rate:85,callout:70,margin:25,hours:5,travel:0.5,mats:[{n:'Timber (per metre)',q:4,c:18},{n:'Screws & nails',q:1,c:15},{n:'Wood glue',q:1,c:12}]},
+  landscaper:{rate:65,callout:60,margin:20,hours:6,travel:1,mats:[{n:'Mulch (per bag)',q:5,c:12},{n:'Plants',q:3,c:25},{n:'Fertiliser',q:1,c:20}]},
+  tiler:{rate:75,callout:60,margin:25,hours:6,travel:0.5,mats:[{n:'Tiles (per sqm)',q:10,c:35},{n:'Tile adhesive',q:2,c:28},{n:'Grout',q:1,c:18}]},
+  concreter:{rate:80,callout:80,margin:25,hours:8,travel:1,mats:[{n:'Concrete (per m3)',q:2,c:180},{n:'Reinforcing mesh',q:2,c:45},{n:'Formwork timber',q:3,c:22}]},
+  plasterer:{rate:70,callout:60,margin:20,hours:5,travel:0.5,mats:[{n:'Plaster (per bag)',q:4,c:22},{n:'Cornice (per length)',q:3,c:15},{n:'Screws & fixings',q:1,c:12}]},
+  roofer:{rate:90,callout:80,margin:25,hours:6,travel:1,mats:[{n:'Roof tiles (per sqm)',q:10,c:28},{n:'Roof screws (box)',q:2,c:18},{n:'Flashing',q:2,c:35}]},
+  hvac:{rate:100,callout:90,margin:20,hours:4,travel:0.5,mats:[{n:'Refrigerant gas',q:1,c:85},{n:'Copper pipe (per m)',q:3,c:22},{n:'Insulation wrap',q:2,c:18}]},
+  handyman:{rate:60,callout:50,margin:20,hours:3,travel:0.5,mats:[{n:'Miscellaneous fixings',q:1,c:25},{n:'Sealant',q:1,c:12}]},
+  pest:{rate:80,callout:80,margin:30,hours:2,travel:0.5,mats:[{n:'Chemical treatment',q:1,c:45},{n:'Bait stations',q:4,c:12}]},
+  locksmith:{rate:90,callout:90,margin:25,hours:1.5,travel:0.5,mats:[{n:'Lock cylinder',q:1,c:55},{n:'Keys cut',q:2,c:8}]}
+};
+function getQuoteLimit(){var today=new Date().toDateString();var stored=localStorage.getItem('qm_date');var count=parseInt(localStorage.getItem('qm_count'))||0;if(stored!==today){localStorage.setItem('qm_date',today);localStorage.setItem('qm_count','0');return 0;}return count;}
+function incrementQuoteCount(){localStorage.setItem('qm_count',getQuoteLimit()+1);}
+function updateCounter(){var used=getQuoteLimit();var remaining=3-used;var el=document.getElementById('quote-counter');el.style.display='block';if(remaining<=0){el.textContent='You have used all 3 free quotes today. Upgrade to Pro for unlimited quotes.';el.style.background='#fef2f2';el.style.borderColor='#fca5a5';el.style.color='#991b1b';}else{el.textContent=remaining+' free quote'+(remaining===1?'':'s')+' remaining today. Upgrade to Pro for unlimited.';el.style.background='#fef3c7';el.style.borderColor='#fcd34d';el.style.color='#92400e';}}
+function fmt(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function getValidityDate(){var d=new Date();d.setDate(d.getDate()+30);return d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});}
+function setTrade(type,btn){document.querySelectorAll('.trade-tab').forEach(function(t){t.classList.remove('active');});btn.classList.add('active');var d=tradeDefaults[type];document.getElementById('rate').value=d.rate;document.getElementById('callout').value=d.callout;document.getElementById('margin').value=d.margin;document.getElementById('hours').value=d.hours;document.getElementById('travel').value=d.travel;document.getElementById('materials').innerHTML='';matCount=0;d.mats.forEach(function(m){addMaterial(m.n,m.q,m.c);});calc();}
+function addMaterial(name,qty,cost){name=name||'';qty=qty||1;cost=cost||'';matCount++;var id=matCount;var row=document.createElement('div');row.className='mat-row';row.id='mat-'+id;row.innerHTML='<input type="text" placeholder="e.g. Copper pipe" value="'+name+'" oninput="calc()">'+'<input type="number" min="1" step="1" value="'+qty+'" style="text-align:center" oninput="calc()">'+'<div class="input-wrap has-prefix"><span class="input-prefix">$</span><input type="number" min="0" step="1" value="'+cost+'" style="text-align:right;padding-right:6px" oninput="calc()"></div>'+'<button class="rm-btn" onclick="document.getElementById(\'mat-'+id+'\').remove();calc()">x</button>';document.getElementById('materials').appendChild(row);calc();}
+function calc(){var rate=parseFloat(document.getElementById('rate').value)||0;var callout=parseFloat(document.getElementById('callout').value)||0;var marginP=parseFloat(document.getElementById('margin').value)||0;var gstP=parseFloat(document.getElementById('gst').value)||0;var hours=parseFloat(document.getElementById('hours').value)||0;var travel=parseFloat(document.getElementById('travel').value)||0;var labour=Math.round(rate*hours*100)/100;var travelC=Math.round(rate*travel*100)/100;var mats=0;document.querySelectorAll('#materials .mat-row').forEach(function(row){var inputs=row.querySelectorAll('input');mats+=(parseFloat(inputs[1].value)||0)*(parseFloat(inputs[2].value)||0);});mats=Math.round(mats*100)/100;var sub=callout+labour+travelC+mats;var marginV=Math.round(sub*marginP/100*100)/100;var preGST=sub+marginV;var gstV=Math.round(preGST*gstP/100*100)/100;var total=Math.round((preGST+gstV)*100)/100;document.getElementById('s-callout').textContent=fmt(callout);document.getElementById('s-labour').textContent=fmt(labour);document.getElementById('s-travel').textContent=fmt(travelC);document.getElementById('s-mats').textContent=fmt(mats);document.getElementById('s-sub').textContent=fmt(sub);document.getElementById('s-margin').textContent=fmt(marginV);document.getElementById('s-gst').textContent=fmt(gstV);document.getElementById('s-total').textContent=fmt(total);document.getElementById('s-margin-lbl').textContent='Margin ('+marginP+'%)';document.getElementById('s-gst-lbl').textContent='GST ('+gstP+'%)';document.getElementById('validity-date').textContent='Valid until: '+getValidityDate();}
+function getQuoteData(){var rate=parseFloat(document.getElementById('rate').value)||0;var callout=parseFloat(document.getElementById('callout').value)||0;var marginP=parseFloat(document.getElementById('margin').value)||0;var gstP=parseFloat(document.getElementById('gst').value)||0;var hours=parseFloat(document.getElementById('hours').value)||0;var travel=parseFloat(document.getElementById('travel').value)||0;var labour=Math.round(rate*hours*100)/100;var travelC=Math.round(rate*travel*100)/100;var mats=0;var matLines=[];document.querySelectorAll('#materials .mat-row').forEach(function(row){var inputs=row.querySelectorAll('input');var n=inputs[0].value||'Item';var q=parseFloat(inputs[1].value)||0;var c=parseFloat(inputs[2].value)||0;mats+=q*c;if(n&&q&&c)matLines.push({n:n,q:q,c:c,t:q*c});});mats=Math.round(mats*100)/100;var sub=callout+labour+travelC+mats;var marginV=Math.round(sub*marginP/100*100)/100;var preGST=sub+marginV;var gstV=Math.round(preGST*gstP/100*100)/100;var total=Math.round((preGST+gstV)*100)/100;return{bizName:document.getElementById('biz-name').value||'Your Business',bizContact:document.getElementById('biz-contact').value||'',bizPhone:document.getElementById('biz-phone').value||'',bizEmail:document.getElementById('biz-email').value||'',client:document.getElementById('client').value||'Client',clientPhone:document.getElementById('client-phone').value||'',jobdesc:document.getElementById('jobdesc').value||'General job',address:document.getElementById('job-address').value||'',notes:document.getElementById('notes').value||'',callout:callout,labour:labour,travelC:travelC,mats:mats,sub:sub,marginV:marginV,marginP:marginP,gstV:gstV,gstP:gstP,total:total,matLines:matLines,quoteNum:document.getElementById('quote-num-badge').textContent,validity:getValidityDate()};}
+function previewQuote(){var used=getQuoteLimit();if(used>=3){showToast('You have used all 3 free quotes today. Upgrade to Pro for unlimited!',true);togglePaywall();return;}quoteCount++;var newNum='QU-'+String(quoteCount).padStart(4,'0');document.getElementById('quote-num-badge').textContent=newNum;incrementQuoteCount();updateCounter();var d=getQuoteData();d.quoteNum=newNum;var html='<div class="preview-biz">'+d.bizName+'</div>'+'<div class="preview-contact">'+(d.bizContact?d.bizContact+' · ':'')+''+(d.bizPhone?d.bizPhone+' · ':'')+d.bizEmail+'</div>'+'<div class="preview-divider"></div>'+'<div class="preview-row"><span class="preview-label">Quote number</span><span class="preview-val">'+d.quoteNum+'</span></div>'+'<div class="preview-row"><span class="preview-label">Prepared for</span><span class="preview-val">'+d.client+(d.clientPhone?' · '+d.clientPhone:'')+'</span></div>'+'<div class="preview-row"><span class="preview-label">Job</span><span class="preview-val">'+d.jobdesc+'</span></div>'+(d.address?'<div class="preview-row"><span class="preview-label">Address</span><span class="preview-val">'+d.address+'</span></div>':'')+'<div class="preview-divider"></div>'+'<div class="preview-row"><span class="preview-label">Call-out fee</span><span class="preview-val">'+fmt(d.callout)+'</span></div>'+'<div class="preview-row"><span class="preview-label">Labour</span><span class="preview-val">'+fmt(d.labour)+'</span></div>'+'<div class="preview-row"><span class="preview-label">Travel</span><span class="preview-val">'+fmt(d.travelC)+'</span></div>';d.matLines.forEach(function(m){html+='<div class="preview-row"><span class="preview-label">'+m.n+(m.q>1?' x '+m.q:'')+'</span><span class="preview-val">'+fmt(m.t)+'</span></div>';});html+='<div class="preview-divider"></div>'+'<div class="preview-row"><span class="preview-label">Subtotal</span><span class="preview-val">'+fmt(d.sub)+'</span></div>'+'<div class="preview-row"><span class="preview-label">Margin ('+d.marginP+'%)</span><span class="preview-val">'+fmt(d.marginV)+'</span></div>'+'<div class="preview-row"><span class="preview-label">GST ('+d.gstP+'%)</span><span class="preview-val">'+fmt(d.gstV)+'</span></div>'+'<div class="preview-total-row"><span class="preview-label">Total</span><span class="preview-val">'+fmt(d.total)+'</span></div>'+(d.notes?'<div class="preview-divider"></div><div style="font-size:12px;color:#6b7280"><strong style="color:#374151">Notes:</strong> '+d.notes+'</div>':'')+'<div class="preview-meta">Valid until '+d.validity+' · Generated by QuoteMate · getquotemate.com.au</div>';document.getElementById('preview-content').innerHTML=html;document.getElementById('preview-overlay').classList.add('show');}
+function closePreview(e){if(e.target.id==='preview-overlay')document.getElementById('preview-overlay').classList.remove('show');}
+function copyFromPreview(){var d=getQuoteData();var lines=['==========================================','QUOTE — '+d.bizName,'==========================================','Quote number: '+d.quoteNum,'Prepared for: '+d.client+(d.clientPhone?' | '+d.clientPhone:''),'Job: '+d.jobdesc,(d.address?'Address: '+d.address:''),'','BREAKDOWN:','Call-out fee:  '+fmt(d.callout),'Labour:        '+fmt(d.labour),'Travel:        '+fmt(d.travelC)];d.matLines.forEach(function(m){lines.push(m.n+(m.q>1?' x '+m.q:'')+':  '+fmt(m.t));});lines=lines.concat(['','Subtotal:      '+fmt(d.sub),'Margin ('+d.marginP+'%): '+fmt(d.marginV),'GST ('+d.gstP+'%):    '+fmt(d.gstV),'','TOTAL:         '+fmt(d.total),'',(d.notes?'Notes: '+d.notes:''),'','Valid until: '+d.validity,'Generated by QuoteMate | getquotemate.com.au','',d.bizContact+' | '+d.bizPhone+' | '+d.bizEmail]);navigator.clipboard.writeText(lines.join('\n')).catch(function(){});showToast('Quote copied! Paste it into a text or email.');document.getElementById('preview-overlay').classList.remove('show');}
+function showToast(msg,isError){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isError?' error':'');t.style.display='block';setTimeout(function(){t.style.display='none';},3500);}
+function togglePaywall(){var pw=document.getElementById('paywall');pw.style.display=pw.style.display==='none'||pw.style.display===''?'block':'none';}
+setTrade('plumber',document.querySelector('.trade-tab.active'));
+updateCounter();
+document.getElementById('validity-date').textContent='Valid until: '+getValidityDate();
+document.getElementById('quote-num-badge').textContent='QU-0001';
 </script>
 </body>
 </html>
