@@ -886,7 +886,7 @@ document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>obs.observe(el));
 window.addEventListener('scroll', ()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>20), {passive:true});
 function toggleNav(){document.getElementById('mob').classList.toggle('open')}
 function closeNav(){document.getElementById('mob').classList.remove('open')}
-function handleForm(){const el=document.getElementById('fok');el.style.display='block';setTimeout(()=>el.style.display='none',6000)}
+function handleForm(){fetch("https://formspree.io/f/mwvznnjv",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:document.getElementById("fn").value+" "+document.getElementById("ln").value,phone:document.getElementById("ph").value,email:document.getElementById("em").value,vehicle:document.getElementById("vm").value,service:document.getElementById("svc").value,message:document.getElementById("msg").value})});const el=document.getElementById('fok');el.style.display='block';setTimeout(()=>el.style.display='none',6000)}
 </script>
 </body>
 </html>
