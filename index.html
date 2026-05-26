@@ -1,233 +1,741 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuoteMate – Quote Calculator for Tradies</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>E.T. Radiator — Auto Repair & Cooling Specialists | Mt Druitt</title>
+<meta name="description" content="Mt Druitt's trusted radiator and auto repair specialists since 2003. Rego inspections, cooling systems, radiator repairs, all mechanical work."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a1a;min-height:100vh}
-  .topbar{background:#1a56a0;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
-  .topbar-logo{font-size:18px;font-weight:700;color:#fff}
-  .topbar-sub{font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px}
-  .plan-badge{font-size:11px;background:rgba(255,255,255,0.2);color:#fff;padding:4px 10px;border-radius:20px;cursor:pointer}
-  .body{padding:14px;max-width:600px;margin:0 auto}
-  .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:12px}
-  .card-title{font-size:12px;font-weight:700;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;text-transform:uppercase;letter-spacing:0.05em}
-  .trade-tabs{display:flex;gap:6px;flex-wrap:wrap}
-  .trade-tab{font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid #d1d5db;background:transparent;color:#6b7280;cursor:pointer;transition:all 0.15s;margin-bottom:4px}
-  .trade-tab:hover{border-color:#93c5fd;color:#1d4ed8}
-  .trade-tab.active{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd;font-weight:600}
-  .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-  .field-grid.single{grid-template-columns:1fr}
-  .field-label{font-size:11px;color:#6b7280;margin-bottom:4px;font-weight:600}
-  .input-wrap{position:relative}
-  .input-prefix{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#9ca3af;pointer-events:none}
-  .input-suffix{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;color:#9ca3af;pointer-events:none}
-  input[type=text],input[type=number],input[type=email],input[type=tel],textarea{width:100%;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:13px;color:#111827;background:#f9fafb;outline:none;transition:border-color 0.15s;font-family:inherit}
-  input:focus,textarea:focus{border-color:#3b82f6;background:#fff}
-  .has-prefix input{padding-left:22px}
-  .has-suffix input{padding-right:26px}
-  textarea{resize:none;line-height:1.5}
-  .mat-header{display:grid;grid-template-columns:1fr 52px 76px 30px;gap:6px;margin-bottom:4px}
-  .mat-header span{font-size:11px;color:#9ca3af;font-weight:600}
-  .mat-row{display:grid;grid-template-columns:1fr 52px 76px 30px;gap:6px;margin-bottom:6px;align-items:center}
-  .rm-btn{width:28px;height:28px;border-radius:6px;border:1px solid #e5e7eb;background:transparent;color:#9ca3af;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
-  .rm-btn:hover{background:#fef2f2;color:#ef4444;border-color:#fca5a5}
-  .add-mat-btn{font-size:12px;color:#2563eb;background:none;border:none;cursor:pointer;padding:4px 0;margin-top:2px;font-weight:600}
-  .summary-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:5px 0;color:#6b7280}
-  .summary-row .val{font-weight:600;color:#374151}
-  .summary-divider{height:1px;background:#f3f4f6;margin:6px 0}
-  .summary-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 4px;border-top:2px solid #e5e7eb;margin-top:4px}
-  .summary-total .label{font-size:15px;font-weight:700;color:#111827}
-  .summary-total .amount{font-size:28px;font-weight:800;color:#111827}
-  .toast{background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 14px;font-size:13px;color:#065f46;margin-bottom:10px;display:none}
-  .toast.error{background:#fef2f2;border-color:#fca5a5;color:#991b1b}
-  .btn-copy{width:100%;padding:11px;background:transparent;color:#374151;border:1px solid #d1d5db;border-radius:8px;font-size:14px;cursor:pointer;margin-bottom:8px;font-weight:600}
-  .btn-copy:hover{background:#f9fafb}
-  .btn-send{width:100%;padding:13px;background:#059669;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
-  .btn-send:hover{background:#047857}
-  .paywall-card{background:#fff;border:2px solid #2563eb;border-radius:12px;padding:16px;margin-top:12px;text-align:center;display:none}
-  .paywall-title{font-size:17px;font-weight:800;color:#111827;margin-bottom:4px}
-  .paywall-sub{font-size:13px;color:#6b7280;margin-bottom:14px;line-height:1.5}
-  .feat-list{text-align:left;margin-bottom:14px}
-  .feat-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;padding:4px 0}
-  .feat-tick{width:18px;height:18px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:11px;font-weight:700}
-  .btn-upgrade{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer}
-  .btn-upgrade:hover{background:#1d4ed8}
-  .price-note{font-size:11px;color:#9ca3af;margin-top:6px}
-  .quote-counter{background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:8px 12px;font-size:12px;color:#92400e;margin-bottom:10px;text-align:center;font-weight:600;display:none}
-  .preview-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:16px}
-  .preview-overlay.show{display:flex}
-  .preview-modal{background:#fff;border-radius:12px;padding:20px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
-  .preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .preview-title{font-size:16px;font-weight:700;color:#111827}
-  .close-btn{background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280}
-  .preview-biz{font-size:15px;font-weight:700;color:#1a56a0;margin-bottom:2px}
-  .preview-contact{font-size:12px;color:#6b7280;margin-bottom:14px}
-  .preview-divider{height:1px;background:#e5e7eb;margin:10px 0}
-  .preview-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0}
-  .preview-row .preview-label{color:#6b7280}
-  .preview-row .preview-val{font-weight:600;color:#111827}
-  .preview-total-row{display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid #111827;margin-top:6px}
-  .preview-total-row .preview-label{font-size:15px;font-weight:700;color:#111827}
-  .preview-total-row .preview-val{font-size:20px;font-weight:800;color:#111827}
-  .preview-meta{font-size:11px;color:#9ca3af;margin-top:10px;text-align:center}
-  .btn-preview-copy{width:100%;padding:11px;background:#1a56a0;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-top:14px}
-  .quote-num-badge{display:inline-block;font-size:11px;background:#dbeafe;color:#1d4ed8;padding:3px 8px;border-radius:6px;font-weight:700;margin-bottom:8px}
-  @media(max-width:480px){.field-grid{grid-template-columns:1fr}}
+/* ═══════════════════════════════════════════
+   TOKENS — change these to restyle everything
+   ═══════════════════════════════════════════ */
+:root {
+  --bg:      #0E0E10;   /* near-black base */
+  --bg2:     #141416;   /* slightly lighter */
+  --s1:      #1A1A1E;   /* card surface */
+  --s2:      #202026;   /* hover surface */
+  --red:     #E03025;   /* primary accent */
+  --red-dim: #B02018;
+  --red-glow:rgba(224,48,37,0.15);
+  --cream:   #F2EDE4;   /* primary light text */
+  --cream2:  #C8C0B4;
+  --muted:   #6E6860;
+  --line:    rgba(242,237,228,0.07);
+  --line2:   rgba(242,237,228,0.12);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--cream);
+  font-family:'Urbanist',sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--red);color:#fff}
+
+/* ── NAV ── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(20px,5%,72px);
+  transition:background .3s,border-color .3s;
+  border-bottom:1px solid transparent;
+}
+#nav.scrolled{
+  background:rgba(14,14,16,0.96);
+  backdrop-filter:blur(20px);
+  border-color:var(--line2);
+}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.logo-mark{width:38px;height:38px;flex-shrink:0}
+.logo-words{display:flex;flex-direction:column;line-height:1}
+.logo-name{font-family:'Urbanist',sans-serif;font-weight:900;font-size:19px;letter-spacing:-.2px;color:var(--cream)}
+.logo-name span{color:var(--red)}
+.logo-tag{font-family:'Geist Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+
+/* Nav links */
+.nav-links{display:flex;gap:34px;list-style:none}
+.nav-links a{font-size:13px;font-weight:500;letter-spacing:.3px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--cream)}
+
+.nav-r{display:flex;align-items:center;gap:14px}
+.nav-tel{font-family:'Geist Mono',monospace;font-size:13px;font-weight:500;color:var(--cream2);text-decoration:none;transition:color .2s}
+.nav-tel:hover{color:var(--red)}
+.nav-cta{
+  background:var(--red);color:#fff;
+  padding:10px 24px;font-size:13px;font-weight:700;letter-spacing:.5px;
+  text-decoration:none;
+  transition:background .2s,transform .15s;
+}
+.nav-cta:hover{background:var(--red-dim);transform:translateY(-1px)}
+
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.ham span{display:block;width:24px;height:1.5px;background:var(--cream2)}
+#mob{display:none;position:fixed;top:72px;inset-inline:0;z-index:190;background:rgba(14,14,16,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--line2);padding:28px clamp(20px,5%,72px);flex-direction:column;gap:20px}
+#mob.open{display:flex}
+#mob a{font-size:13px;font-weight:500;letter-spacing:.5px;color:var(--muted);text-decoration:none;transition:color .2s}
+#mob a:hover{color:var(--red)}
+
+/* ── HERO ── */
+#hero{
+  min-height:100svh;
+  position:relative;
+  display:flex;align-items:center;
+  overflow:hidden;
+}
+/* Background car image — full bleed with gradient overlay */
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  /* PHOTO: Replace the Unsplash URL below with your own car photo */
+  background:
+    linear-gradient(
+      to right,
+      rgba(14,14,16,1) 0%,
+      rgba(14,14,16,0.92) 35%,
+      rgba(14,14,16,0.6) 55%,
+      rgba(14,14,16,0.1) 75%,
+      rgba(14,14,16,0) 100%
+    ),
+    url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1800&q=85') right center / cover no-repeat;
+}
+.hero-bg-overlay{
+  position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 60% 80% at 20% 50%, rgba(224,48,37,0.06) 0%, transparent 70%);
+}
+/* Thin red line top */
+.hero-redline{
+  position:absolute;top:72px;left:0;right:0;height:1px;z-index:1;
+  background:linear-gradient(to right, var(--red), rgba(224,48,37,0) 60%);
+  opacity:.5;
+}
+
+.hero-content{
+  position:relative;z-index:1;
+  padding:140px clamp(20px,6%,80px) 100px;
+  max-width:680px;
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--red);
+  padding:6px 16px;font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:#fff;
+  margin-bottom:28px;
+}
+h1{
+  font-family:'Urbanist',sans-serif;font-weight:900;
+  font-size:clamp(52px,6.5vw,92px);
+  line-height:.93;letter-spacing:-2px;
+  color:var(--cream);margin-bottom:28px;
+}
+h1 .hl{color:var(--red)}
+
+.hero-desc{
+  font-size:16px;font-weight:400;color:var(--muted);
+  max-width:420px;line-height:1.8;margin-bottom:44px;
+}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.btn-red{
+  display:inline-block;background:var(--red);color:#fff;
+  padding:15px 36px;font-size:13px;font-weight:700;letter-spacing:1px;
+  text-decoration:none;transition:background .2s,transform .15s;
+}
+.btn-red:hover{background:var(--red-dim);transform:translateY(-2px)}
+.btn-outline{
+  display:inline-block;border:1px solid var(--line2);color:var(--cream2);
+  padding:14px 32px;font-size:13px;font-weight:600;letter-spacing:.5px;
+  text-decoration:none;transition:border-color .2s,color .2s;
+}
+.btn-outline:hover{border-color:var(--red);color:var(--red)}
+
+.hero-stats{
+  display:flex;gap:0;margin-top:64px;
+  border-top:1px solid var(--line2);
+}
+.hst{padding:24px 40px 0 0;flex:1;border-right:1px solid var(--line2)}
+.hst:last-child{border-right:none;padding-left:40px;padding-right:0}
+.hst-n{font-family:'Urbanist',sans-serif;font-weight:900;font-size:44px;color:var(--red);line-height:1}
+.hst-l{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* Floating rating badge */
+.hero-badge{
+  position:absolute;
+  bottom:48px;right:clamp(20px,4%,60px);
+  z-index:2;
+  background:rgba(14,14,16,.85);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--line2);
+  border-left:3px solid var(--red);
+  padding:16px 22px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.hb-s{color:var(--red);font-size:14px;letter-spacing:2px}
+.hb-t{font-size:14px;font-weight:700;color:var(--cream)}
+.hb-m{font-family:'Geist Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px}
+
+/* ── BRAND STRIP ── */
+.brand-strip{
+  background:var(--bg2);
+  border-top:1px solid var(--line2);
+  border-bottom:1px solid var(--line2);
+  padding:22px clamp(20px,5%,72px);
+  display:flex;align-items:center;gap:48px;
+  overflow-x:auto;scrollbar-width:none;
+}
+.brand-strip::-webkit-scrollbar{display:none}
+.bs-label{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.bs-divider{width:1px;height:28px;background:var(--line2);flex-shrink:0}
+.bs-logos{display:flex;align-items:center;gap:40px;flex:1;justify-content:center}
+.bs-logo{font-family:'Urbanist',sans-serif;font-weight:900;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--line2);white-space:nowrap;transition:color .25s;cursor:default}
+.bs-logo:hover{color:var(--muted)}
+
+/* ── SECTION SHELL ── */
+.sec{padding:100px clamp(20px,5%,72px)}
+.sec.alt{background:var(--bg2)}
+
+.stag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'Geist Mono',monospace;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--red);margin-bottom:14px;
+}
+.stag::before{content:'';width:20px;height:1.5px;background:var(--red)}
+h2{
+  font-family:'Urbanist',sans-serif;font-weight:900;
+  font-size:clamp(34px,4.5vw,56px);
+  line-height:.95;letter-spacing:-1px;
+  color:var(--cream);margin-bottom:14px;
+}
+.lead{font-size:16px;font-weight:400;color:var(--muted);max-width:500px;line-height:1.8}
+
+/* ── SERVICES (2-col with big image) ── */
+#services .svc-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;background:var(--line2);border:1px solid var(--line2);
+  margin-top:52px;
+}
+/* Left col: service cards stacked */
+.svc-left{display:flex;flex-direction:column;gap:0}
+.sv{
+  background:var(--bg);padding:36px 36px;
+  border-bottom:1px solid var(--line2);
+  position:relative;overflow:hidden;transition:background .2s;cursor:default;
+}
+.sv:last-child{border-bottom:none}
+.sv::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--red);transition:width .3s}
+.sv:hover{background:var(--s1)}
+.sv:hover::before{width:3px}
+.sv-num{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--red);margin-bottom:10px}
+.sv h3{font-family:'Urbanist',sans-serif;font-weight:800;font-size:20px;color:var(--cream);margin-bottom:8px;letter-spacing:-.2px}
+.sv p{font-size:13px;color:var(--muted);line-height:1.7}
+.sv-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px}
+.sv-tag{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border:1px solid var(--line2);color:var(--muted)}
+
+/* Right col: big workshop photo */
+.svc-right{
+  position:relative;overflow:hidden;
+  /* PHOTO: Replace with your mechanic/workshop photo */
+  background:
+    linear-gradient(to bottom, rgba(14,14,16,0) 50%, rgba(14,14,16,.9) 100%),
+    url('https://images.unsplash.com/photo-1530046339160-ce3e530c7d2f?w=900&q=80') center/cover no-repeat;
+  min-height:560px;
+}
+.svc-right-badge{
+  position:absolute;bottom:32px;left:32px;
+  background:var(--red);padding:12px 20px;
+}
+.srb-n{font-family:'Urbanist',sans-serif;font-weight:900;font-size:36px;color:#fff;line-height:1}
+.srb-l{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-top:4px}
+
+/* ── WHY US (dark grid) ── */
+#why .why-wrap{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+.why-left h2{margin-bottom:20px}
+.why-left .lead{margin-bottom:36px}
+.feat-list{border:1px solid var(--line2)}
+.feat{display:flex;align-items:center;gap:16px;padding:17px 22px;border-bottom:1px solid var(--line2);transition:background .15s}
+.feat:last-child{border-bottom:none}
+.feat:hover{background:var(--s1)}
+.feat-dot{width:5px;height:5px;background:var(--red);border-radius:50%;flex-shrink:0}
+.feat-t{font-size:14px;color:var(--muted)}
+.feat-t strong{color:var(--cream);font-weight:600}
+
+.why-right-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:2px;background:var(--line2);border:1px solid var(--line2);
+}
+.wc{background:var(--s1);padding:32px 28px;display:flex;flex-direction:column;gap:14px;transition:background .2s}
+.wc:hover{background:var(--s2)}
+.wc-icon{width:44px;height:44px;background:var(--red-glow);border:1px solid rgba(224,48,37,.2);display:flex;align-items:center;justify-content:center}
+.wc-icon svg{width:20px;height:20px;stroke:var(--red);fill:none;stroke-width:1.5}
+.wc strong{font-family:'Urbanist',sans-serif;font-weight:800;font-size:15px;color:var(--cream);letter-spacing:-.1px}
+.wc p{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── RED CTA STRIP ── */
+.cta-strip{
+  background:var(--red);
+  padding:64px clamp(20px,5%,72px);
+  display:flex;justify-content:space-between;align-items:center;
+  gap:32px;flex-wrap:wrap;
+}
+.cs-left h2{color:#fff;font-size:clamp(28px,3.5vw,48px);letter-spacing:-1px;margin-bottom:6px}
+.cs-left p{color:rgba(255,255,255,.7);font-size:15px}
+.cs-btn{
+  background:#fff;color:var(--red);
+  padding:15px 40px;font-size:13px;font-weight:800;letter-spacing:.5px;
+  text-decoration:none;white-space:nowrap;flex-shrink:0;
+  transition:background .2s,transform .15s;
+}
+.cs-btn:hover{background:var(--cream);transform:translateY(-1px)}
+
+/* ── ABOUT ── */
+#about .about-g{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch}
+.about-vis{
+  position:relative;overflow:hidden;min-height:520px;
+  /* PHOTO: Replace with your about/workshop photo */
+  background:
+    linear-gradient(to bottom, transparent 50%, rgba(14,14,16,.95) 100%),
+    url('https://images.unsplash.com/photo-1625047509168-a7026f36de04?w=900&q=80') center/cover no-repeat;
+  border-right:1px solid var(--line2);
+}
+.av-tag{
+  position:absolute;top:28px;left:28px;
+  background:var(--red);padding:7px 14px;
+  font-family:'Geist Mono',monospace;font-size:9px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:#fff;
+}
+.av-yr{
+  position:absolute;bottom:24px;right:20px;
+  font-family:'Urbanist',sans-serif;font-weight:900;font-size:96px;
+  color:rgba(224,48,37,.08);line-height:1;z-index:0;
+}
+.av-quote{position:absolute;bottom:36px;left:32px;right:32px;z-index:1}
+.avq-t{font-family:'Urbanist',sans-serif;font-weight:700;font-size:22px;line-height:1.25;color:var(--cream);margin-bottom:12px}
+.avq-t em{color:var(--red);font-style:normal}
+.avq-by{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cream2);opacity:.6}
+.about-content{padding:80px clamp(20px,5%,64px)}
+.about-content h2{margin-bottom:18px}
+.about-content p{font-size:15px;color:var(--muted);line-height:1.82;margin-bottom:16px}
+.mls{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line2);border:1px solid var(--line2);margin-top:32px}
+.ml{background:var(--s1);padding:22px;text-align:center;transition:background .2s}
+.ml:hover{background:var(--s2)}
+.ml-n{font-family:'Urbanist',sans-serif;font-weight:900;font-size:34px;color:var(--red);line-height:1}
+.ml-l{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:5px}
+
+/* ── REVIEWS ── */
+#reviews{background:var(--bg)}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line2);border:1px solid var(--line2);margin-top:52px}
+.rc{background:var(--bg2);padding:40px 34px;position:relative;overflow:hidden;transition:background .25s}
+.rc:hover{background:var(--s1)}
+.rc::before{content:'"';position:absolute;top:4px;right:18px;font-size:96px;font-family:Georgia,serif;color:rgba(224,48,37,.07);line-height:1}
+.rc-stars{display:flex;gap:3px;margin-bottom:18px}
+.rc-stars span{color:var(--red);font-size:13px}
+.rc blockquote{font-size:14px;color:var(--muted);line-height:1.78;margin-bottom:26px;font-style:italic}
+.rc-auth{display:flex;align-items:center;gap:14px;padding-top:18px;border-top:1px solid var(--line2)}
+.rc-av{width:40px;height:40px;flex-shrink:0;background:var(--red-glow);border:1px solid rgba(224,48,37,.25);display:flex;align-items:center;justify-content:center;font-family:'Urbanist',sans-serif;font-weight:800;font-size:14px;color:var(--red)}
+.rc-name{font-size:13px;font-weight:700;color:var(--cream)}
+.rc-car{font-family:'Geist Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.5px}
+
+/* ── CONTACT ── */
+#contact{background:var(--bg2)}
+.ct-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.ct-l{padding:100px clamp(20px,5%,64px);border-right:1px solid var(--line2)}
+.ct-r{padding:100px clamp(20px,5%,64px)}
+.i-stack{display:flex;flex-direction:column;gap:2px;background:var(--line2);border:1px solid var(--line2);margin-top:36px}
+.ir{background:var(--bg);padding:20px 22px;display:flex;align-items:flex-start;gap:18px;transition:background .2s}
+.ir:hover{background:var(--s1)}
+.ii{flex-shrink:0;width:38px;height:38px;border:1px solid rgba(224,48,37,.2);display:flex;align-items:center;justify-content:center;margin-top:2px}
+.ii svg{width:17px;height:17px;stroke:var(--red);fill:none;stroke-width:1.5}
+.il{font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.iv{font-size:14px;font-weight:600;color:var(--cream)}
+.iv a{color:inherit;text-decoration:none;transition:color .2s}
+.iv a:hover{color:var(--red)}
+.hrs{width:100%}
+.hrs td{padding:3px 0;font-size:13px}
+.hrs td:first-child{color:var(--muted)}
+.hrs td:last-child{text-align:right;font-weight:600;color:var(--cream)}
+.day-o{color:#6EAF6E !important}
+.day-c{color:var(--muted) !important}
+.map-w{margin-top:14px;border:1px solid var(--line2);overflow:hidden}
+.map-w iframe{display:block;width:100%;height:200px;border:0;filter:grayscale(40%) contrast(1.1)}
+.ct-r h3{font-family:'Urbanist',sans-serif;font-weight:900;font-size:clamp(28px,3vw,44px);color:var(--cream);letter-spacing:-1px;margin-bottom:8px;line-height:.97}
+.ct-r .lead{margin-bottom:32px}
+.ff{margin-bottom:14px}
+.ff label{display:block;font-family:'Geist Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.ff input,.ff select,.ff textarea{width:100%;padding:13px 16px;background:var(--bg);border:1px solid var(--line2);color:var(--cream);font-family:'Urbanist',sans-serif;font-size:14px;outline:none;transition:border-color .2s;appearance:none}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--red)}
+.ff select option{background:var(--s1)}
+.ff textarea{height:105px;resize:vertical}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn-sub{width:100%;background:var(--red);color:#fff;border:none;padding:15px;font-family:'Urbanist',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:background .2s,transform .15s}
+.btn-sub:hover{background:var(--red-dim);transform:translateY(-1px)}
+.f-ok{display:none;margin-top:12px;font-family:'Geist Mono',monospace;font-size:10px;color:#6EAF6E;letter-spacing:1px}
+
+/* ── FOOTER ── */
+footer{background:#080809;border-top:1px solid var(--line2);padding:64px clamp(20px,5%,72px) 28px}
+.ft-g{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.ft-b p{font-size:13px;color:var(--muted);line-height:1.75;margin-top:16px;max-width:260px}
+.ft-c h4{font-family:'Geist Mono',monospace;font-size:10px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--cream2);margin-bottom:16px}
+.ft-c ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-c a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.ft-c a:hover{color:var(--red)}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding-top:24px;border-top:1px solid var(--line2)}
+.ft-bot p{font-family:'Geist Mono',monospace;font-size:11px;color:#3a3a3a;letter-spacing:.5px}
+.ft-bot b{color:var(--red)}
+.socials{display:flex;gap:10px}
+.sl{width:36px;height:36px;border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:border-color .2s,color .2s}
+.sl:hover{border-color:var(--red);color:var(--red)}
+.sl svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.5}
+
+/* ── REVEAL ── */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rvl{opacity:0;transform:translateX(-22px);transition:opacity .7s ease,transform .7s ease}
+.rvr{opacity:0;transform:translateX(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.in,.rvl.in,.rvr.in{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .nav-links,.nav-tel,.nav-cta{display:none}.ham{display:flex}
+  .hero-bg{background:linear-gradient(to bottom,rgba(14,14,16,.85),rgba(14,14,16,.85)),url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1200&q=80') center/cover no-repeat}
+  #services .svc-wrap{grid-template-columns:1fr}
+  .svc-right{display:none}
+  #why .why-wrap{grid-template-columns:1fr}
+  #about .about-g{grid-template-columns:1fr}.about-vis{display:none}
+  .ct-wrap{grid-template-columns:1fr}.ct-l{border-right:none;border-bottom:1px solid var(--line2)}
+  .rev-grid{grid-template-columns:1fr}
+  .ft-g{grid-template-columns:1fr 1fr}
+  .cta-strip{flex-direction:column;text-align:center}
+}
+@media(max-width:640px){
+  .ft-g{grid-template-columns:1fr}
+  .f2{grid-template-columns:1fr}
+  .hero-stats{flex-direction:column;gap:16px}
+  .hst{border-right:none;border-bottom:1px solid var(--line2);padding:0 0 16px}
+  .hst:last-child{border-bottom:none}
+  .mls{grid-template-columns:1fr 1fr}
+  .bs-logos{gap:24px}
+}
 </style>
 </head>
 <body>
-<div class="topbar">
-  <div>
-    <div class="topbar-logo">QuoteMate</div>
-    <div class="topbar-sub">Professional quote calculator for tradies</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 1L35.5 10V28L19 37L2.5 28V10L19 1Z" fill="#E03025"/>
+      <rect x="9.5" y="13" width="19" height="12" rx=".8" fill="none" stroke="#fff" stroke-width="1.2"/>
+      <line x1="13.5" y1="13" x2="13.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+      <line x1="17.5" y1="13" x2="17.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+      <line x1="21.5" y1="13" x2="21.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+      <line x1="25.5" y1="13" x2="25.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+      <line x1="9.5" y1="16.5" x2="6.5" y2="16.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="9.5" y1="21.5" x2="6.5" y2="21.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="28.5" y1="16.5" x2="31.5" y2="16.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+      <line x1="28.5" y1="21.5" x2="31.5" y2="21.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    <div class="logo-words">
+      <span class="logo-name">E.T. <span>Radiator</span></span>
+      <span class="logo-tag">Auto Repair Specialists</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <a href="tel:0296254994" class="nav-tel">(02) 9625 4994</a>
+    <a href="booking.html" class="nav-cta">Book Now</a>
   </div>
-  <span class="plan-badge" onclick="togglePaywall()">Free plan</span>
+  <div class="ham" onclick="toggleNav()"><span></span><span></span><span></span></div>
+</nav>
+<div id="mob">
+  <a href="#services" onclick="closeNav()">Services</a>
+  <a href="#why" onclick="closeNav()">Why Us</a>
+  <a href="#about" onclick="closeNav()">About</a>
+  <a href="#contact" onclick="closeNav()">Contact</a>
+  <a href="booking.html" style="color:var(--red)">Book a Service</a>
+  <a href="tel:0296254994" style="color:var(--red)">(02) 9625 4994</a>
 </div>
-<div class="body">
-  <div class="toast" id="toast"></div>
-  <div class="quote-counter" id="quote-counter"></div>
-  <div class="card">
-    <div class="card-title">Your business details</div>
-    <div class="field-grid">
-      <div><div class="field-label">Business name</div><input type="text" id="biz-name" placeholder="e.g. Dave's Plumbing Co."></div>
-      <div><div class="field-label">Your name</div><input type="text" id="biz-contact" placeholder="e.g. Dave Smith"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-bg-overlay"></div>
+  <div class="hero-redline"></div>
+
+  <div class="hero-content">
+    <div class="hero-pill rv">Welcome to E.T. Radiator</div>
+    <h1 class="rv">
+      Your <span class="hl">Trusted</span><br>
+      Auto Repair<br>
+      Specialists.
+    </h1>
+    <p class="hero-desc rv">We offer reliable and efficient service to ensure your vehicle is always in top condition. Family business, Mt Druitt, 22 years strong.</p>
+    <div class="hero-actions rv">
+      <a href="booking.html" class="btn-red">Book a Service →</a>
+      <a href="#services" class="btn-outline">Our Services</a>
     </div>
-    <div class="field-grid">
-      <div><div class="field-label">Phone</div><input type="tel" id="biz-phone" placeholder="e.g. 0412 345 678"></div>
-      <div><div class="field-label">Email</div><input type="email" id="biz-email" placeholder="e.g. dave@gmail.com"></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Trade type</div>
-    <div class="trade-tabs">
-      <button class="trade-tab active" onclick="setTrade('plumber',this)">Plumber</button>
-      <button class="trade-tab" onclick="setTrade('electrician',this)">Electrician</button>
-      <button class="trade-tab" onclick="setTrade('cleaner',this)">Cleaner</button>
-      <button class="trade-tab" onclick="setTrade('painter',this)">Painter</button>
-      <button class="trade-tab" onclick="setTrade('builder',this)">Builder</button>
-      <button class="trade-tab" onclick="setTrade('carpenter',this)">Carpenter</button>
-      <button class="trade-tab" onclick="setTrade('landscaper',this)">Landscaper</button>
-      <button class="trade-tab" onclick="setTrade('tiler',this)">Tiler</button>
-      <button class="trade-tab" onclick="setTrade('concreter',this)">Concreter</button>
-      <button class="trade-tab" onclick="setTrade('plasterer',this)">Plasterer</button>
-      <button class="trade-tab" onclick="setTrade('roofer',this)">Roofer</button>
-      <button class="trade-tab" onclick="setTrade('hvac',this)">Air Con / HVAC</button>
-      <button class="trade-tab" onclick="setTrade('handyman',this)">Handyman</button>
-      <button class="trade-tab" onclick="setTrade('pest',this)">Pest Control</button>
-      <button class="trade-tab" onclick="setTrade('locksmith',this)">Locksmith</button>
+    <div class="hero-stats rv">
+      <div class="hst"><div class="hst-n">22+</div><div class="hst-l">Years Running</div></div>
+      <div class="hst"><div class="hst-n">3</div><div class="hst-l">Mechanics</div></div>
+      <div class="hst"><div class="hst-n">98%</div><div class="hst-l">Satisfaction</div></div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-title">Your rates</div>
-    <div class="field-grid">
-      <div><div class="field-label">Hourly rate</div><div class="input-wrap has-prefix"><span class="input-prefix">$</span><input type="number" id="rate" value="95" min="0" step="1" oninput="calc()"></div></div>
-      <div><div class="field-label">Call-out fee</div><div class="input-wrap has-prefix"><span class="input-prefix">$</span><input type="number" id="callout" value="80" min="0" step="1" oninput="calc()"></div></div>
-      <div><div class="field-label">Your margin</div><div class="input-wrap has-suffix"><input type="number" id="margin" value="20" min="0" max="100" step="1" oninput="calc()"><span class="input-suffix">%</span></div></div>
-      <div><div class="field-label">GST</div><div class="input-wrap has-suffix"><input type="number" id="gst" value="10" min="0" max="30" step="1" oninput="calc()"><span class="input-suffix">%</span></div></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Job details</div>
-    <div class="field-grid">
-      <div><div class="field-label">Client name</div><input type="text" id="client" placeholder="e.g. Sarah Johnson" oninput="calc()"></div>
-      <div><div class="field-label">Client phone</div><input type="tel" id="client-phone" placeholder="e.g. 0423 456 789"></div>
-    </div>
-    <div class="field-grid single" style="margin-bottom:10px"><div><div class="field-label">Job description</div><input type="text" id="jobdesc" placeholder="e.g. Replace hot water system" oninput="calc()"></div></div>
-    <div class="field-grid single" style="margin-bottom:10px"><div><div class="field-label">Job address</div><input type="text" id="job-address" placeholder="e.g. 12 Smith St, Parramatta NSW"></div></div>
-    <div class="field-grid">
-      <div><div class="field-label">Labour hours</div><input type="number" id="hours" value="3" min="0" step="0.5" oninput="calc()"></div>
-      <div><div class="field-label">Travel time (hrs)</div><input type="number" id="travel" value="0.5" min="0" step="0.5" oninput="calc()"></div>
-    </div>
-    <div style="margin-top:10px"><div class="field-label">Job notes</div><textarea id="notes" rows="2" placeholder="e.g. Access via side gate. Client needs job done before Friday."></textarea></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Materials & extras</div>
-    <div class="mat-header"><span>Item</span><span style="text-align:center">Qty</span><span style="text-align:right">Unit cost</span><span></span></div>
-    <div id="materials"></div>
-    <button class="add-mat-btn" onclick="addMaterial()">+ Add item</button>
-  </div>
-  <div class="card">
-    <div class="card-title">Quote summary</div>
-    <div class="quote-num-badge" id="quote-num-badge">QU-0001</div>
-    <div class="summary-row"><span>Call-out fee</span><span class="val" id="s-callout">$0.00</span></div>
-    <div class="summary-row"><span>Labour</span><span class="val" id="s-labour">$0.00</span></div>
-    <div class="summary-row"><span>Travel</span><span class="val" id="s-travel">$0.00</span></div>
-    <div class="summary-row"><span>Materials</span><span class="val" id="s-mats">$0.00</span></div>
-    <div class="summary-divider"></div>
-    <div class="summary-row"><span>Subtotal</span><span class="val" id="s-sub">$0.00</span></div>
-    <div class="summary-row"><span id="s-margin-lbl">Margin (20%)</span><span class="val" id="s-margin">$0.00</span></div>
-    <div class="summary-row"><span id="s-gst-lbl">GST (10%)</span><span class="val" id="s-gst">$0.00</span></div>
-    <div class="summary-total"><span class="label">Total</span><span class="amount" id="s-total">$0.00</span></div>
-    <div style="font-size:11px;color:#9ca3af;margin-top:6px" id="validity-date"></div>
-  </div>
-  <button class="btn-copy" onclick="previewQuote()">Preview & copy quote</button>
-  <button class="btn-send" onclick="window.open('https://buy.stripe.com/5kQ7sDbuEasOda14Fe0oM00','_blank')">Send quote as link — upgrade to Pro</button>
-  <div class="paywall-card" id="paywall">
-    <div class="paywall-title">Unlock QuoteMate Pro</div>
-    <div class="paywall-sub">Send professional quote links your clients can approve on their phone with one tap.</div>
-    <div class="feat-list">
-      <div class="feat-item"><div class="feat-tick">✓</div>Shareable quote link — client approves with one tap</div>
-      <div class="feat-item"><div class="feat-tick">✓</div>Unlimited quotes per day</div>
-      <div class="feat-item"><div class="feat-tick">✓</div>Save your quote history</div>
-      <div class="feat-item"><div class="feat-tick">✓</div>Add your business logo</div>
-      <div class="feat-item"><div class="feat-tick">✓</div>Auto-convert to invoice on approval</div>
-      <div class="feat-item"><div class="feat-tick">✓</div>Client e-signature</div>
-      <div class="feat-item"><div class="feat-tick">✓</div>Remove QuoteMate branding</div>
-    </div>
-    <button class="btn-upgrade" onclick="window.open('https://buy.stripe.com/5kQ7sDbuEasOda14Fe0oM00','_blank')">Start 14-day free trial</button>
-    <div class="price-note">$9/mo after trial · Cancel any time</div>
+
+</section>
+
+<!-- BRAND STRIP -->
+<div class="brand-strip">
+  <span class="bs-label">We Service</span>
+  <div class="bs-divider"></div>
+  <div class="bs-logos">
+    <span class="bs-logo">Toyota</span>
+    <span class="bs-logo">Hyundai</span>
+    <span class="bs-logo">Ford</span>
+    <span class="bs-logo">Mercedes</span>
+    <span class="bs-logo">Mazda</span>
+    <span class="bs-logo">Kia</span>
+    <span class="bs-logo">Nissan</span>
+    <span class="bs-logo">Subaru</span>
+    <span class="bs-logo">BMW</span>
   </div>
 </div>
-<div class="preview-overlay" id="preview-overlay" onclick="closePreview(event)">
-  <div class="preview-modal">
-    <div class="preview-header">
-      <div class="preview-title">Quote preview</div>
-      <button class="close-btn" onclick="document.getElementById('preview-overlay').classList.remove('show')">✕</button>
-    </div>
-    <div id="preview-content"></div>
-    <button class="btn-preview-copy" onclick="copyFromPreview()">Copy quote as text</button>
+
+<!-- SERVICES -->
+<section id="services" class="sec alt">
+  <div class="rv">
+    <div class="stag">What We Offer</div>
+    <h2>Our Services</h2>
+    <p class="lead">Everything your vehicle needs — under one roof in Mt Druitt.</p>
   </div>
+  <div class="svc-wrap">
+    <div class="svc-left">
+      <div class="sv rv">
+        <div class="sv-num">01</div>
+        <h3>Rego Inspections</h3>
+        <p>Authorised pink slip and blue slip inspections. All makes and models. Walk-ins welcome — most done within the hour.</p>
+        <div class="sv-tags"><span class="sv-tag">Pink Slip</span><span class="sv-tag">Blue Slip</span><span class="sv-tag">Walk-ins OK</span></div>
+      </div>
+      <div class="sv rv">
+        <div class="sv-num">02</div>
+        <h3>Complete Cooling System Service</h3>
+        <p>Full flush and refill, thermostat testing, hose inspection, water pump checks, and pressure testing.</p>
+        <div class="sv-tags"><span class="sv-tag">Flush & Fill</span><span class="sv-tag">Pressure Test</span><span class="sv-tag">Thermostat</span></div>
+      </div>
+      <div class="sv rv">
+        <div class="sv-num">03</div>
+        <h3>New Radiators & Repairs</h3>
+        <p>Leaks, cracks, blockages, corrosion — we repair what can be saved and replace what can't. Large range in stock.</p>
+        <div class="sv-tags"><span class="sv-tag">Leak Repair</span><span class="sv-tag">Recoring</span><span class="sv-tag">New Supply</span></div>
+      </div>
+      <div class="sv rv">
+        <div class="sv-num">04</div>
+        <h3>All Mechanical Repairs</h3>
+        <p>Brakes, suspension, steering, oil changes, A/C, transmission, engine work and more. Three certified mechanics on site daily.</p>
+        <div class="sv-tags"><span class="sv-tag">Brakes</span><span class="sv-tag">Suspension</span><span class="sv-tag">A/C</span><span class="sv-tag">Engine</span></div>
+      </div>
+    </div>
+    <!-- PHOTO: Replace URL in CSS .svc-right with your own workshop photo -->
+    <div class="svc-right rvr">
+      <div class="svc-right-badge">
+        <div class="srb-n">22+</div>
+        <div class="srb-l">Years of expertise</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why" class="sec">
+  <div class="why-wrap">
+    <div class="why-left rvl">
+      <div class="stag">Why Choose Us</div>
+      <h2>Drive with<br>Confidence</h2>
+      <p class="lead">We are experienced and certified mechanics who trust the highest quality professionals from our city. We know what it takes to give you the best.</p>
+      <div class="feat-list" style="margin-top:32px">
+        <div class="feat"><div class="feat-dot"></div><div class="feat-t"><strong>Authorised rego inspector</strong> — pink & blue slips same day</div></div>
+        <div class="feat"><div class="feat-dot"></div><div class="feat-t"><strong>Radiator specialists</strong> since the day we opened in 2003</div></div>
+        <div class="feat"><div class="feat-dot"></div><div class="feat-t"><strong>Modern diagnostic equipment</strong> for all makes & models</div></div>
+        <div class="feat"><div class="feat-dot"></div><div class="feat-t"><strong>OEM & aftermarket parts</strong> — only what we'd use ourselves</div></div>
+        <div class="feat"><div class="feat-dot"></div><div class="feat-t"><strong>Upfront pricing</strong> — quote approved before we start</div></div>
+        <div class="feat"><div class="feat-dot"></div><div class="feat-t"><strong>Fleet servicing</strong> — competitive rates for business vehicles</div></div>
+      </div>
+    </div>
+    <div class="why-right-grid rvr">
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <strong>Licensed & Authorised</strong>
+        <p>Fully licensed workshop. Authorised for rego inspections — pink and blue slips.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+        <strong>Same-Day Service</strong>
+        <p>Most repairs completed the same day. We know you need your car back fast.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V7m0 1v8m0 0v1"/></svg></div>
+        <strong>Upfront Pricing</strong>
+        <p>No surprises. You see and approve the quote before we start any work.</p>
+      </div>
+      <div class="wc">
+        <div class="wc-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div>
+        <strong>Warranty on Work</strong>
+        <p>All parts and labour are covered. Ask us about warranty on your specific repair.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div class="cs-left">
+    <h2>Need a rego inspection<br>or radiator sorted today?</h2>
+    <p>Mt Druitt's most trusted workshop since 2003. Walk-ins welcome.</p>
+  </div>
+  <a href="booking.html" class="cs-btn">Book in Now →</a>
 </div>
+
+<!-- ABOUT -->
+<section id="about" class="sec alt">
+  <div class="about-g">
+    <div class="about-vis rvl">
+      <div class="av-tag">Est. 2003 · Mt Druitt</div>
+      <div class="av-yr">2003</div>
+      <div class="av-quote">
+        <div class="avq-t">"Started with a passion for engines — and a belief that <em>honest work</em> builds a lasting business."</div>
+        <div class="avq-by">E.T. Radiator · Unit 3/1 Stout Rd, Mt Druitt NSW</div>
+      </div>
+    </div>
+    <div class="about-content rvr">
+      <div class="stag">Our Story</div>
+      <h2>22 Years Keeping<br>Mt Druitt Moving</h2>
+      <p>E.T. Radiator has been a fixture in Mt Druitt since 2003. We started as a cooling system and radiator specialist and have grown into a full-service mechanical workshop — but cooling systems remain our heartland.</p>
+      <p>Three experienced mechanics on site every day, handling everything from a simple oil change to complex engine work. We're also authorised rego inspectors — pink slip and blue slip on the spot.</p>
+      <div class="mls rv">
+        <div class="ml"><div class="ml-n">22+</div><div class="ml-l">Years Serving</div></div>
+        <div class="ml"><div class="ml-n">3</div><div class="ml-l">Mechanics On Site</div></div>
+        
+        <div class="ml"><div class="ml-n">ABN</div><div class="ml-l">78 958 785 328</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="ct-wrap">
+    <div class="ct-l rvl">
+      <div class="stag">Find Us</div>
+      <h2>Get in Touch</h2>
+      <p class="lead">Call, drop by, or send a message — we'll get back to you fast.</p>
+      <div class="i-stack">
+        <div class="ir"><div class="ii"><svg viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><circle cx="12" cy="11" r="3"/></svg></div><div><div class="il">Address</div><div class="iv">Unit 3/1 Stout Rd & Kurranjong Ave<br>Mt Druitt NSW 2770</div></div></div>
+        <div class="ir"><div class="ii"><svg viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div><div><div class="il">Phone</div><div class="iv"><a href="tel:0296254994">(02) 9625 4994</a></div></div></div>
+        <div class="ir"><div class="ii"><svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div><div><div class="il">Email</div><div class="iv"><a href="mailto:cheng.thach@gmail.com">cheng.thach@gmail.com</a></div></div></div>
+        <div class="ir"><div class="ii"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="il">Trading Hours</div><table class="hrs"><tr><td>Mon – Fri</td><td class="day-o">7:30am – 5:30pm</td></tr><tr><td>Saturday</td><td class="day-o">8:00am – 2:00pm</td></tr><tr><td>Sunday</td><td class="day-c">Closed</td></tr></table></div></div>
+      </div>
+      <div class="map-w">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3316.795469605269!2d150.80904307570415!3d-33.76595077326614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129af52734de3d%3A0x23fa63371d744dbe!2s3%2F1%20Stout%20Rd%2C%20Mount%20Druitt%20NSW%202770!5e0!3m2!1sen!2sau!4v1779671805558!5m2!1sen!2sau" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    <div class="ct-r rvr">
+      <div class="stag">Quick Enquiry</div>
+      <h3>Send Us a<br>Message</h3>
+      <p class="lead">We'll get back to you within the hour during business hours.</p>
+      <div class="f2">
+        <div class="ff"><label>First Name</label><input type="text" placeholder="John"></div>
+        <div class="ff"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+      </div>
+      <div class="f2">
+        <div class="ff"><label>Phone</label><input type="tel" placeholder="04XX XXX XXX"></div>
+        <div class="ff"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+      </div>
+      <div class="f2">
+        <div class="ff"><label>Vehicle Make</label><input type="text" placeholder="e.g. Toyota"></div>
+        <div class="ff"><label>Year</label><input type="text" placeholder="e.g. 2019"></div>
+      </div>
+      <div class="ff">
+        <label>Service Required</label>
+        <select>
+          <option value="">Select a service…</option>
+          <option>Rego Inspection — Pink Slip</option>
+          <option>Rego Inspection — Blue Slip</option>
+          <option>Cooling System Service</option>
+          <option>Radiator Repair</option>
+          <option>New Radiator Supply & Fit</option>
+          <option>Brake Service</option>
+          <option>Oil & Filter Change</option>
+          <option>Engine Diagnostics</option>
+          <option>A/C Service</option>
+          <option>Suspension / Steering</option>
+          <option>Other / Not Sure</option>
+        </select>
+      </div>
+      <div class="ff"><label>Tell Us More</label><textarea placeholder="Describe the issue or symptoms…"></textarea></div>
+      <button class="btn-sub" onclick="handleForm()">Send Message →</button>
+      <p class="f-ok" id="fok">✓ Message sent — we'll be in touch shortly!</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-g">
+    <div class="ft-b">
+      <a href="#" class="logo">
+        <svg class="logo-mark" viewBox="0 0 38 38" fill="none">
+          <path d="M19 1L35.5 10V28L19 37L2.5 28V10L19 1Z" fill="#E03025"/>
+          <rect x="9.5" y="13" width="19" height="12" rx=".8" fill="none" stroke="#fff" stroke-width="1.2"/>
+          <line x1="13.5" y1="13" x2="13.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+          <line x1="17.5" y1="13" x2="17.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+          <line x1="21.5" y1="13" x2="21.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+          <line x1="25.5" y1="13" x2="25.5" y2="25" stroke="#fff" stroke-width="1.1" stroke-opacity=".5"/>
+          <line x1="9.5" y1="16.5" x2="6.5" y2="16.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="9.5" y1="21.5" x2="6.5" y2="21.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="28.5" y1="16.5" x2="31.5" y2="16.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+          <line x1="28.5" y1="21.5" x2="31.5" y2="21.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-words">
+          <span class="logo-name">E.T. <span>Radiator</span></span>
+          <span class="logo-tag">Auto Repair Specialists</span>
+        </div>
+      </a>
+      <p>Mt Druitt's trusted auto repair and cooling specialists since 2003. Family-owned, locally operated.</p>
+    </div>
+    <div class="ft-c"><h4>Services</h4><ul><li><a href="#services">Rego Inspections</a></li><li><a href="#services">Cooling System Service</a></li><li><a href="#services">Radiator Repairs</a></li><li><a href="#services">All Mechanical Repairs</a></li><li><a href="booking.html">Book Online</a></li></ul></div>
+    <div class="ft-c"><h4>Workshop</h4><ul><li><a href="#about">Our Story</a></li><li><a href="#why">Why Choose Us</a></li><li><a href="#contact">Contact</a></li><li><a href="admin/index.html" style="color:#222;font-size:11px">Staff Login</a></li></ul></div>
+    <div class="ft-c"><h4>Contact</h4><ul><li><a href="tel:0296254994">(02) 9625 4994</a></li><li><a href="mailto:cheng.thach@gmail.com">cheng.thach@gmail.com</a></li><li><a href="#" style="pointer-events:none;color:var(--muted);font-size:12px">Unit 3/1 Stout Rd<br>Mt Druitt NSW 2770</a></li><li><a href="#" style="pointer-events:none;color:var(--muted);font-size:12px">Mon–Fri 7:30am–5:30pm</a></li><li><a href="#" style="pointer-events:none;color:var(--muted);font-size:12px">Sat 8:00am–2:00pm</a></li></ul></div>
+  </div>
+  <div class="ft-bot">
+    <p>© 2025 <b>E.T. Radiator</b>. All rights reserved. ABN 78 958 785 328</p>
+    <div class="socials">
+      <a href="#" class="sl"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+      <a href="#" class="sl"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    </div>
+  </div>
+</footer>
+
 <script>
-var matCount=0,quoteCount=0;
-var tradeDefaults={
-  plumber:{rate:95,callout:80,margin:20,hours:3,travel:0.5,mats:[{n:'Copper fittings',q:1,c:45},{n:'Pipe (per metre)',q:3,c:12}]},
-  electrician:{rate:110,callout:90,margin:20,hours:2.5,travel:0.5,mats:[{n:'Cable (per metre)',q:5,c:8},{n:'GPO outlet',q:2,c:18}]},
-  cleaner:{rate:45,callout:0,margin:15,hours:4,travel:0.5,mats:[{n:'Cleaning supplies',q:1,c:25}]},
-  painter:{rate:65,callout:50,margin:25,hours:6,travel:1,mats:[{n:'Paint (10L)',q:2,c:85},{n:'Primer',q:1,c:40},{n:'Brushes & rollers',q:1,c:30}]},
-  builder:{rate:90,callout:100,margin:30,hours:8,travel:1,mats:[{n:'Timber (per sheet)',q:4,c:55},{n:'Screws & fixings',q:1,c:22}]},
-  carpenter:{rate:85,callout:70,margin:25,hours:5,travel:0.5,mats:[{n:'Timber (per metre)',q:4,c:18},{n:'Screws & nails',q:1,c:15},{n:'Wood glue',q:1,c:12}]},
-  landscaper:{rate:65,callout:60,margin:20,hours:6,travel:1,mats:[{n:'Mulch (per bag)',q:5,c:12},{n:'Plants',q:3,c:25},{n:'Fertiliser',q:1,c:20}]},
-  tiler:{rate:75,callout:60,margin:25,hours:6,travel:0.5,mats:[{n:'Tiles (per sqm)',q:10,c:35},{n:'Tile adhesive',q:2,c:28},{n:'Grout',q:1,c:18}]},
-  concreter:{rate:80,callout:80,margin:25,hours:8,travel:1,mats:[{n:'Concrete (per m3)',q:2,c:180},{n:'Reinforcing mesh',q:2,c:45},{n:'Formwork timber',q:3,c:22}]},
-  plasterer:{rate:70,callout:60,margin:20,hours:5,travel:0.5,mats:[{n:'Plaster (per bag)',q:4,c:22},{n:'Cornice (per length)',q:3,c:15},{n:'Screws & fixings',q:1,c:12}]},
-  roofer:{rate:90,callout:80,margin:25,hours:6,travel:1,mats:[{n:'Roof tiles (per sqm)',q:10,c:28},{n:'Roof screws (box)',q:2,c:18},{n:'Flashing',q:2,c:35}]},
-  hvac:{rate:100,callout:90,margin:20,hours:4,travel:0.5,mats:[{n:'Refrigerant gas',q:1,c:85},{n:'Copper pipe (per m)',q:3,c:22},{n:'Insulation wrap',q:2,c:18}]},
-  handyman:{rate:60,callout:50,margin:20,hours:3,travel:0.5,mats:[{n:'Miscellaneous fixings',q:1,c:25},{n:'Sealant',q:1,c:12}]},
-  pest:{rate:80,callout:80,margin:30,hours:2,travel:0.5,mats:[{n:'Chemical treatment',q:1,c:45},{n:'Bait stations',q:4,c:12}]},
-  locksmith:{rate:90,callout:90,margin:25,hours:1.5,travel:0.5,mats:[{n:'Lock cylinder',q:1,c:55},{n:'Keys cut',q:2,c:8}]}
-};
-function getQuoteLimit(){var today=new Date().toDateString();var stored=localStorage.getItem('qm_date');var count=parseInt(localStorage.getItem('qm_count'))||0;if(stored!==today){localStorage.setItem('qm_date',today);localStorage.setItem('qm_count','0');return 0;}return count;}
-function incrementQuoteCount(){localStorage.setItem('qm_count',getQuoteLimit()+1);}
-function updateCounter(){var used=getQuoteLimit();var remaining=3-used;var el=document.getElementById('quote-counter');el.style.display='block';if(remaining<=0){el.textContent='You have used all 3 free quotes today. Upgrade to Pro for unlimited quotes.';el.style.background='#fef2f2';el.style.borderColor='#fca5a5';el.style.color='#991b1b';}else{el.textContent=remaining+' free quote'+(remaining===1?'':'s')+' remaining today. Upgrade to Pro for unlimited.';el.style.background='#fef3c7';el.style.borderColor='#fcd34d';el.style.color='#92400e';}}
-function fmt(n){return '$'+Math.abs(n).toLocaleString('en-AU',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function getValidityDate(){var d=new Date();d.setDate(d.getDate()+30);return d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});}
-function setTrade(type,btn){document.querySelectorAll('.trade-tab').forEach(function(t){t.classList.remove('active');});btn.classList.add('active');var d=tradeDefaults[type];document.getElementById('rate').value=d.rate;document.getElementById('callout').value=d.callout;document.getElementById('margin').value=d.margin;document.getElementById('hours').value=d.hours;document.getElementById('travel').value=d.travel;document.getElementById('materials').innerHTML='';matCount=0;d.mats.forEach(function(m){addMaterial(m.n,m.q,m.c);});calc();}
-function addMaterial(name,qty,cost){name=name||'';qty=qty||1;cost=cost||'';matCount++;var id=matCount;var row=document.createElement('div');row.className='mat-row';row.id='mat-'+id;row.innerHTML='<input type="text" placeholder="e.g. Copper pipe" value="'+name+'" oninput="calc()">'+'<input type="number" min="1" step="1" value="'+qty+'" style="text-align:center" oninput="calc()">'+'<div class="input-wrap has-prefix"><span class="input-prefix">$</span><input type="number" min="0" step="1" value="'+cost+'" style="text-align:right;padding-right:6px" oninput="calc()"></div>'+'<button class="rm-btn" onclick="document.getElementById(\'mat-'+id+'\').remove();calc()">x</button>';document.getElementById('materials').appendChild(row);calc();}
-function calc(){var rate=parseFloat(document.getElementById('rate').value)||0;var callout=parseFloat(document.getElementById('callout').value)||0;var marginP=parseFloat(document.getElementById('margin').value)||0;var gstP=parseFloat(document.getElementById('gst').value)||0;var hours=parseFloat(document.getElementById('hours').value)||0;var travel=parseFloat(document.getElementById('travel').value)||0;var labour=Math.round(rate*hours*100)/100;var travelC=Math.round(rate*travel*100)/100;var mats=0;document.querySelectorAll('#materials .mat-row').forEach(function(row){var inputs=row.querySelectorAll('input');mats+=(parseFloat(inputs[1].value)||0)*(parseFloat(inputs[2].value)||0);});mats=Math.round(mats*100)/100;var sub=callout+labour+travelC+mats;var marginV=Math.round(sub*marginP/100*100)/100;var preGST=sub+marginV;var gstV=Math.round(preGST*gstP/100*100)/100;var total=Math.round((preGST+gstV)*100)/100;document.getElementById('s-callout').textContent=fmt(callout);document.getElementById('s-labour').textContent=fmt(labour);document.getElementById('s-travel').textContent=fmt(travelC);document.getElementById('s-mats').textContent=fmt(mats);document.getElementById('s-sub').textContent=fmt(sub);document.getElementById('s-margin').textContent=fmt(marginV);document.getElementById('s-gst').textContent=fmt(gstV);document.getElementById('s-total').textContent=fmt(total);document.getElementById('s-margin-lbl').textContent='Margin ('+marginP+'%)';document.getElementById('s-gst-lbl').textContent='GST ('+gstP+'%)';document.getElementById('validity-date').textContent='Valid until: '+getValidityDate();}
-function getQuoteData(){var rate=parseFloat(document.getElementById('rate').value)||0;var callout=parseFloat(document.getElementById('callout').value)||0;var marginP=parseFloat(document.getElementById('margin').value)||0;var gstP=parseFloat(document.getElementById('gst').value)||0;var hours=parseFloat(document.getElementById('hours').value)||0;var travel=parseFloat(document.getElementById('travel').value)||0;var labour=Math.round(rate*hours*100)/100;var travelC=Math.round(rate*travel*100)/100;var mats=0;var matLines=[];document.querySelectorAll('#materials .mat-row').forEach(function(row){var inputs=row.querySelectorAll('input');var n=inputs[0].value||'Item';var q=parseFloat(inputs[1].value)||0;var c=parseFloat(inputs[2].value)||0;mats+=q*c;if(n&&q&&c)matLines.push({n:n,q:q,c:c,t:q*c});});mats=Math.round(mats*100)/100;var sub=callout+labour+travelC+mats;var marginV=Math.round(sub*marginP/100*100)/100;var preGST=sub+marginV;var gstV=Math.round(preGST*gstP/100*100)/100;var total=Math.round((preGST+gstV)*100)/100;return{bizName:document.getElementById('biz-name').value||'Your Business',bizContact:document.getElementById('biz-contact').value||'',bizPhone:document.getElementById('biz-phone').value||'',bizEmail:document.getElementById('biz-email').value||'',client:document.getElementById('client').value||'Client',clientPhone:document.getElementById('client-phone').value||'',jobdesc:document.getElementById('jobdesc').value||'General job',address:document.getElementById('job-address').value||'',notes:document.getElementById('notes').value||'',callout:callout,labour:labour,travelC:travelC,mats:mats,sub:sub,marginV:marginV,marginP:marginP,gstV:gstV,gstP:gstP,total:total,matLines:matLines,quoteNum:document.getElementById('quote-num-badge').textContent,validity:getValidityDate()};}
-function previewQuote(){var used=getQuoteLimit();if(used>=3){showToast('You have used all 3 free quotes today. Upgrade to Pro for unlimited!',true);togglePaywall();return;}quoteCount++;var newNum='QU-'+String(quoteCount).padStart(4,'0');document.getElementById('quote-num-badge').textContent=newNum;incrementQuoteCount();updateCounter();var d=getQuoteData();d.quoteNum=newNum;var html='<div class="preview-biz">'+d.bizName+'</div>'+'<div class="preview-contact">'+(d.bizContact?d.bizContact+' · ':'')+''+(d.bizPhone?d.bizPhone+' · ':'')+d.bizEmail+'</div>'+'<div class="preview-divider"></div>'+'<div class="preview-row"><span class="preview-label">Quote number</span><span class="preview-val">'+d.quoteNum+'</span></div>'+'<div class="preview-row"><span class="preview-label">Prepared for</span><span class="preview-val">'+d.client+(d.clientPhone?' · '+d.clientPhone:'')+'</span></div>'+'<div class="preview-row"><span class="preview-label">Job</span><span class="preview-val">'+d.jobdesc+'</span></div>'+(d.address?'<div class="preview-row"><span class="preview-label">Address</span><span class="preview-val">'+d.address+'</span></div>':'')+'<div class="preview-divider"></div>'+'<div class="preview-row"><span class="preview-label">Call-out fee</span><span class="preview-val">'+fmt(d.callout)+'</span></div>'+'<div class="preview-row"><span class="preview-label">Labour</span><span class="preview-val">'+fmt(d.labour)+'</span></div>'+'<div class="preview-row"><span class="preview-label">Travel</span><span class="preview-val">'+fmt(d.travelC)+'</span></div>';d.matLines.forEach(function(m){html+='<div class="preview-row"><span class="preview-label">'+m.n+(m.q>1?' x '+m.q:'')+'</span><span class="preview-val">'+fmt(m.t)+'</span></div>';});html+='<div class="preview-divider"></div>'+'<div class="preview-row"><span class="preview-label">Subtotal</span><span class="preview-val">'+fmt(d.sub)+'</span></div>'+'<div class="preview-row"><span class="preview-label">Margin ('+d.marginP+'%)</span><span class="preview-val">'+fmt(d.marginV)+'</span></div>'+'<div class="preview-row"><span class="preview-label">GST ('+d.gstP+'%)</span><span class="preview-val">'+fmt(d.gstV)+'</span></div>'+'<div class="preview-total-row"><span class="preview-label">Total</span><span class="preview-val">'+fmt(d.total)+'</span></div>'+(d.notes?'<div class="preview-divider"></div><div style="font-size:12px;color:#6b7280"><strong style="color:#374151">Notes:</strong> '+d.notes+'</div>':'')+'<div class="preview-meta">Valid until '+d.validity+' · Generated by QuoteMate · getquotemate.com.au</div>';document.getElementById('preview-content').innerHTML=html;document.getElementById('preview-overlay').classList.add('show');}
-function closePreview(e){if(e.target.id==='preview-overlay')document.getElementById('preview-overlay').classList.remove('show');}
-function copyFromPreview(){var d=getQuoteData();var lines=['==========================================','QUOTE — '+d.bizName,'==========================================','Quote number: '+d.quoteNum,'Prepared for: '+d.client+(d.clientPhone?' | '+d.clientPhone:''),'Job: '+d.jobdesc,(d.address?'Address: '+d.address:''),'','BREAKDOWN:','Call-out fee:  '+fmt(d.callout),'Labour:        '+fmt(d.labour),'Travel:        '+fmt(d.travelC)];d.matLines.forEach(function(m){lines.push(m.n+(m.q>1?' x '+m.q:'')+':  '+fmt(m.t));});lines=lines.concat(['','Subtotal:      '+fmt(d.sub),'Margin ('+d.marginP+'%): '+fmt(d.marginV),'GST ('+d.gstP+'%):    '+fmt(d.gstV),'','TOTAL:         '+fmt(d.total),'',(d.notes?'Notes: '+d.notes:''),'','Valid until: '+d.validity,'Generated by QuoteMate | getquotemate.com.au','',d.bizContact+' | '+d.bizPhone+' | '+d.bizEmail]);navigator.clipboard.writeText(lines.join('\n')).catch(function(){});showToast('Quote copied! Paste it into a text or email.');document.getElementById('preview-overlay').classList.remove('show');}
-function showToast(msg,isError){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isError?' error':'');t.style.display='block';setTimeout(function(){t.style.display='none';},3500);}
-function togglePaywall(){var pw=document.getElementById('paywall');pw.style.display=pw.style.display==='none'||pw.style.display===''?'block':'none';}
-setTrade('plumber',document.querySelector('.trade-tab.active'));
-updateCounter();
-document.getElementById('validity-date').textContent='Valid until: '+getValidityDate();
-document.getElementById('quote-num-badge').textContent='QU-0001';
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -28px 0px'});
+document.querySelectorAll('.rv,.rvl,.rvr').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>20),{passive:true});
+function toggleNav(){document.getElementById('mob').classList.toggle('open')}
+function closeNav(){document.getElementById('mob').classList.remove('open')}
+function handleForm(){const el=document.getElementById('fok');el.style.display='block';setTimeout(()=>el.style.display='none',6000)}
 </script>
 </body>
 </html>
